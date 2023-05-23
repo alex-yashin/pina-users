@@ -4,6 +4,7 @@
 namespace PinaUsers\Endpoints;
 
 
+use Pina\Response;
 use PinaUsers\Collections\UserCollection;
 use Pina\App;
 use Pina\Data\DataRecord;
@@ -25,5 +26,41 @@ class UserEndpoint extends DelegatedCollectionEndpoint
         );
         $this->collection = $this->export = App::make(UserCollection::class);
     }
+
+    /**
+     * @param $id
+     * @return \Pina\Controls\Control
+     * @throws \Exception
+     */
+    public function show($id)
+    {
+        $r = parent::show($id);
+        if ($this->query()->get('display') == 'edit') {
+            $r->after($this->makePasswordForm());
+        }
+        return $r;
+    }
+
+    public function updatePassword($tmp, $id)
+    {
+        $data = $this->request()->all();
+
+        $context = $this->context()->all();
+
+        $id = $this->collection->updatePassword($id, $data, $context);
+
+        return Response::ok()->contentLocation($this->base->link('@/:id', ['id' => $id]));
+    }
+
+    /**
+     * @return mixed
+     * @throws \Exception
+     */
+    protected function makePasswordForm()
+    {
+        $schema = $this->collection->getPasswordSchema();
+        return $this->makeEditForm(new DataRecord([], $schema))->setAction($this->location->link('@/password'));
+    }
+
 
 }
