@@ -9,7 +9,7 @@ use function Pina\__;
 
 class EmailType extends StringType
 {
-    public function getSize()
+    public function getSize(): int
     {
         return 256;
     }

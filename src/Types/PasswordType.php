@@ -11,7 +11,7 @@ use Pina\Types\StringType;
 class PasswordType extends StringType
 {
 
-    public function getSize()
+    public function getSize(): int
     {
         return 60;
     }

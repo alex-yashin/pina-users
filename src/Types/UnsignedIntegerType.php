@@ -8,7 +8,7 @@ use Pina\Types\IntegerType;
 
 class UnsignedIntegerType extends IntegerType
 {
-    public function getSQLType()
+    public function getSQLType(): string
     {
         return "int(" . $this->getSize() . ") unsigned ";
     }
