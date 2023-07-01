@@ -9,6 +9,8 @@ use Pina\Controls\RecordForm;
 use Pina\Data\DataRecord;
 use Pina\Data\Schema;
 use Pina\Http\Endpoint;
+use Pina\Request;
+use PinaUsers\Controls\AuthWrapper;
 use PinaUsers\Hash;
 use PinaUsers\PasswordRecoveryGateway;
 use PinaUsers\Types\EmailType;
@@ -30,6 +32,9 @@ class PasswordRecoveryEndpoint extends Endpoint
      */
     public function index()
     {
+
+        Request::setPlace('page_header', __('Восстановить пароль'));
+
         /** @var RecordForm $form */
         $form = App::load(RecordForm::class);
         $form->setAction($this->location->resource('@'));
@@ -42,7 +47,7 @@ class PasswordRecoveryEndpoint extends Endpoint
         $authButton->setTitle(__('Вспомнил пароль'));
         $form->getButtonRow()->append($authButton);
 
-        return $form;
+        return $form->wrap(App::make(AuthWrapper::class));
     }
 
     /**

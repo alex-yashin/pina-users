@@ -3,13 +3,20 @@
 namespace PinaUsers\Endpoints;
 
 use Pina\App;
+use Pina\Controls\ButtonRow;
+use Pina\Controls\HandledForm;
 use Pina\Controls\LinkedButton;
+use Pina\Controls\LinkedListItem;
 use Pina\Controls\RecordForm;
+use Pina\Controls\SubmitButton;
+use Pina\Controls\Wrapper;
 use Pina\Data\DataRecord;
 use Pina\Data\Schema;
 use Pina\Http\Endpoint;
+use Pina\Request;
+use PinaDashboard\Dashboard;
 use PinaUsers\Auth;
-use PinaUsers\Controls\Welcome;
+use PinaUsers\Controls\AuthWrapper;
 use PinaUsers\Types\PasswordType;
 
 use Pina\Response;
@@ -21,7 +28,6 @@ class AuthEndpoint extends Endpoint
 {
 
     /**
-     * @return Welcome|RecordForm
      * @throws \Exception
      */
     public function index()
@@ -29,14 +35,24 @@ class AuthEndpoint extends Endpoint
         /** @var Auth $auth */
         $auth = App::load(Auth::class);
         if ($auth->isSignedIn()) {
-            /** @var Welcome $welcome */
-            $welcome = App::load(Welcome::class);
-            return $welcome;
+            Request::setPlace('page_header', __('Добро пожаловать'));
+
+            /** @var HandledForm $form */
+            $form = App::load(HandledForm::class);
+            $form->addClass('form-logout');
+            $form->setAction('auth');
+            $form->setMethod('delete');
+            $form->append($this->makeDashboardMenu());
+            $form->append($this->makeLogoutButton());
+            return $form->wrap(App::make(AuthWrapper::class));
         }
+
+        Request::setPlace('page_header', __('Войти'));
 
         /** @var RecordForm $form */
         $form = App::load(RecordForm::class);
         $form->setMethod('post');
+        $form->setAction($this->location->link('@'));
         $form->load(new DataRecord([], $this->getSchema()));
 
         /** @var LinkedButton $authButton */
@@ -45,7 +61,7 @@ class AuthEndpoint extends Endpoint
         $authButton->setTitle(__('Восстановить пароль'));
         $form->getButtonRow()->append($authButton);
 
-        return $form;
+        return $form->wrap(App::make(AuthWrapper::class));
     }
 
     /**
@@ -87,5 +103,34 @@ class AuthEndpoint extends Endpoint
         $schema->add('email', 'Email', StringType::class)->setMandatory();
         $schema->add('password', __('Пароль'), PasswordType::class)->setMandatory();
         return $schema;
+    }
+
+    protected function makeDashboardMenu()
+    {
+        /** @var Dashboard $dashboard */
+        $dashboard = App::load(Dashboard::class);
+        $menu = $dashboard->getMenu();
+
+        $view = new Wrapper('nav.card/ul.nav');
+
+        foreach ($menu as $item) {
+            /** @var LinkedListItem $itemView */
+            $itemView = App::make(LinkedListItem::class);
+            $itemView->setLink('/' . $item->getLink());
+            $itemView->setText($item->getTitle());
+            $view->append($itemView);
+        }
+
+        return $view;
+    }
+
+    protected function makeLogoutButton()
+    {
+        $button = new SubmitButton();
+        $button->setTitle(__("Выйти"));
+
+        $row = App::make(ButtonRow::class);
+        $row->append($button);
+        return $row;
     }
 }

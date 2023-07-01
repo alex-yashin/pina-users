@@ -35,6 +35,7 @@ class Module implements ModuleInterface
     public function http()
     {
         App::router()->register('auth', AuthEndpoint::class);
+        App::router()->register('403', AuthEndpoint::class);
         App::router()->register('password-recovery', PasswordRecoveryEndpoint::class);
 
         /** @var Dashboard $dashboard */
@@ -43,6 +44,7 @@ class Module implements ModuleInterface
 
         Access::addGroup('public');
         Access::permit('auth', 'public');
+        Access::permit('403', 'public');
         Access::permit('password-recovery', 'public');
         Access::permit('users', 'root');
 
