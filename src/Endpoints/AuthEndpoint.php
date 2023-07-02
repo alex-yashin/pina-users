@@ -6,7 +6,6 @@ use Pina\App;
 use Pina\Controls\ButtonRow;
 use Pina\Controls\HandledForm;
 use Pina\Controls\LinkedButton;
-use Pina\Controls\LinkedListItem;
 use Pina\Controls\RecordForm;
 use Pina\Controls\SubmitButton;
 use Pina\Controls\Wrapper;
@@ -14,7 +13,7 @@ use Pina\Data\DataRecord;
 use Pina\Data\Schema;
 use Pina\Http\Endpoint;
 use Pina\Request;
-use PinaDashboard\Dashboard;
+use PinaDashboard\Widgets\Menu;
 use PinaUsers\Auth;
 use PinaUsers\Controls\AuthWrapper;
 use PinaUsers\Types\PasswordType;
@@ -107,21 +106,10 @@ class AuthEndpoint extends Endpoint
 
     protected function makeDashboardMenu()
     {
-        /** @var Dashboard $dashboard */
-        $dashboard = App::load(Dashboard::class);
-        $menu = $dashboard->getMenu();
-
-        $view = new Wrapper('nav.card/ul.nav');
-
-        foreach ($menu as $item) {
-            /** @var LinkedListItem $itemView */
-            $itemView = App::make(LinkedListItem::class);
-            $itemView->setLink('/' . $item->getLink());
-            $itemView->setText($item->getTitle());
-            $view->append($itemView);
-        }
-
-        return $view;
+        /** @var Menu $menu */
+        $menu = App::make(Menu::class);
+        $menu->wrap(new Wrapper('nav.card'));
+        return $menu;
     }
 
     protected function makeLogoutButton()
