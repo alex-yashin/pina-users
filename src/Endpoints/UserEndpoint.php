@@ -11,13 +11,15 @@ use Pina\Data\DataRecord;
 use Pina\Http\DelegatedCollectionEndpoint;
 use Pina\Http\Request;
 
+use function Pina\__;
+
 class UserEndpoint extends DelegatedCollectionEndpoint
 {
 
     public function __construct(Request $request)
     {
         parent::__construct($request);
-        $this->composer->configure('Users', 'Create user');
+        $this->composer->configure(__('Пользователи'), 'Добавить пользователя');
         $this->composer->setItemCallback(
             function (DataRecord $record) {
                 $data = $record->getData();
