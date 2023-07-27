@@ -13,7 +13,7 @@ class AuthWrapper extends Control
     protected function draw()
     {
         return Html::nest(
-            '.limited container',
+            '.limited container section',
             $this->drawInnerBefore() . $this->drawInner() . $this->drawInnerAfter()
         );
     }

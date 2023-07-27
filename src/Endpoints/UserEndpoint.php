@@ -23,7 +23,7 @@ class UserEndpoint extends DelegatedCollectionEndpoint
         $this->composer->setItemCallback(
             function (DataRecord $record) {
                 $data = $record->getData();
-                return $data['firstname'] . ' ' . $data['lastname'];
+                return $data['first_name'] . ' ' . $data['last_name'];
             }
         );
         $this->collection = $this->export = App::make(UserCollection::class);
