@@ -23,6 +23,7 @@ class Installation implements InstallationInterface
             UserGateway::instance()->insert(array(
                 'email' => 'admin',
                 'password' => Hash::make('admin'),
+                'group' => 'root',
             ));
         }
     }
