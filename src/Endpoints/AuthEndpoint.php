@@ -54,6 +54,8 @@ class AuthEndpoint extends Endpoint
         $form->setAction($this->location->link('@'));
         $form->load(new DataRecord([], $this->getSchema()));
 
+        $form->getButtonRow()->getMain()->setTitle(__('Войти'));
+
         /** @var LinkedButton $authButton */
         $authButton = App::make(LinkedButton::class);
         $authButton->setLink($this->location->link('password-recovery'));
