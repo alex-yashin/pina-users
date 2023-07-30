@@ -34,6 +34,8 @@ class Module implements ModuleInterface
 
     public function http()
     {
+        $_SERVER['PINA_USER_ID'] = App::make(Auth::class)->userId();
+
         App::router()->register('auth', AuthEndpoint::class);
         App::router()->register('403', AuthEndpoint::class);
         App::router()->register('password-recovery', PasswordRecoveryEndpoint::class);
