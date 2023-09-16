@@ -21,7 +21,7 @@ class PasswordType extends StringType
         /** @var FormInput $input */
         $input = App::make(FormInput::class);
         $input->setType('password');
-        $input->setName($field->getKey());
+        $input->setName($field->getName());
         $input->setTitle($field->getTitle());
         return $input;
     }
