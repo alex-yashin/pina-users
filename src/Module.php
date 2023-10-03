@@ -42,7 +42,8 @@ class Module implements ModuleInterface
 
         /** @var Dashboard $dashboard */
         $dashboard = App::load(Dashboard::class);
-        $dashboard->register('users', UserEndpoint::class);
+        $section = $dashboard->section($this->getTitle());
+        $section->register('users', UserEndpoint::class);
 
         Access::addGroup('public');
         Access::permit('auth', 'public');
