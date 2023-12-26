@@ -34,7 +34,7 @@ class Module implements ModuleInterface
 
     public function http()
     {
-        $_SERVER['PINA_USER_ID'] = App::make(Auth::class)->userId();
+        $_SERVER['PINA_USER_ID'] = $userId = App::make(Auth::class)->userId();
 
         App::router()->register('auth', AuthEndpoint::class);
         App::router()->register('403', AuthEndpoint::class);
@@ -46,6 +46,9 @@ class Module implements ModuleInterface
         $section->register('users', UserEndpoint::class);
 
         Access::addGroup('public');
+        if ($userId) {
+            Access::addGroup('registered');
+        }
         Access::permit('auth', 'public');
         Access::permit('403', 'public');
         Access::permit('password-recovery', 'public');
