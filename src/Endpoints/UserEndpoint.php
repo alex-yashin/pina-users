@@ -47,9 +47,7 @@ class UserEndpoint extends DelegatedCollectionEndpoint
     {
         $data = $this->request()->all();
 
-        $context = $this->context()->all();
-
-        $id = $this->collection->updatePassword($id, $data, $context);
+        $id = $this->collection->updatePassword($id, $data);
 
         return Response::ok()->contentLocation($this->base->link('@/:id', ['id' => $id]));
     }

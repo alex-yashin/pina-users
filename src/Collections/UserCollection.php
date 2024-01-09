@@ -28,11 +28,6 @@ class UserCollection extends DataCollection
         return parent::getListSchema()->forgetField('password');
     }
 
-    public function getFilterSchema(): Schema
-    {
-        return $this->getListSchema()->forgetStatic()->setNullable()->setMandatory(false);
-    }
-
     /**
      * @return Schema
      * @throws \Exception
@@ -51,7 +46,7 @@ class UserCollection extends DataCollection
      * @return string
      * @throws \Exception
      */
-    public function updatePassword(string $id, array $data, array $context = []): string
+    public function updatePassword(string $id, array $data): string
     {
         $schema = $this->getPasswordSchema();
 
