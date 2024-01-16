@@ -2,14 +2,17 @@
 
 namespace PinaUsers\Endpoints;
 
-use PHPMailer\PHPMailer\PHPMailer;
 use Pina\App;
 use Pina\Controls\LinkedButton;
+use Pina\Controls\RawHtml;
 use Pina\Controls\RecordForm;
+use Pina\Controls\Wrapper;
 use Pina\Data\DataRecord;
 use Pina\Data\Schema;
 use Pina\Http\Endpoint;
 use Pina\Request;
+use PinaNotifications\Messages\Message;
+use PinaNotifications\Recipients\EmailRecipient;
 use PinaUsers\Controls\AuthWrapper;
 use PinaUsers\Hash;
 use PinaUsers\PasswordRecoveryGateway;
@@ -32,7 +35,6 @@ class PasswordRecoveryEndpoint extends Endpoint
      */
     public function index()
     {
-
         Request::setPlace('page_header', __('Восстановить пароль'));
 
         /** @var RecordForm $form */
@@ -41,11 +43,25 @@ class PasswordRecoveryEndpoint extends Endpoint
         $form->setMethod('post');
         $form->load(new DataRecord([], $this->getEmailSchema()));
 
+        $form->getButtonRow()->getMain()->setTitle('Восстановить');
+
         /** @var LinkedButton $authButton */
         $authButton = App::make(LinkedButton::class);
         $authButton->setLink($this->location->link('auth'));
         $authButton->setTitle(__('Вспомнил пароль'));
         $form->getButtonRow()->append($authButton);
+
+        $status = $this->query()->get('status');
+        if ($status == 'success') {
+            $alert = new Wrapper(".alert alert-info");
+            $alert->append(new RawHtml('Ссылка отправлена'));
+            $form->prepend($alert);
+        }
+        if ($status == 'fail') {
+            $alert = new Wrapper(".alert alert-danger");
+            $alert->append(new RawHtml('Невозможно отправить ссылку'));
+            $form->prepend($alert);
+        }
 
         return $form->wrap(App::make(AuthWrapper::class));
     }
@@ -68,9 +84,9 @@ class PasswordRecoveryEndpoint extends Endpoint
         $token = PasswordRecoveryGateway::instance()->insertGetId(["user_id" => $userId]);
         $link = $this->location->link('@/:id', ['id' => $token]);
 
-        $this->sendEmail($normalized['email'], $link);
+        $success = $this->sendEmail($normalized['email'], $link);
 
-        return Response::ok();
+        return Response::ok()->contentLocation($this->location->link('@', ['status' => $success ? 'success' : 'fail']));
     }
 
     /**
@@ -80,6 +96,8 @@ class PasswordRecoveryEndpoint extends Endpoint
      */
     public function show($id)
     {
+        Request::setPlace('page_header', __('Сменить пароль'));
+
         PasswordRecoveryGateway::instance()->findOrFail($id);
 
         /** @var RecordForm $form */
@@ -88,7 +106,7 @@ class PasswordRecoveryEndpoint extends Endpoint
         $form->setAction($this->location->resource('@'));
         $form->load(new DataRecord([], $this->getPasswordSchema()));
 
-        return $form;
+        return $form->wrap(App::make(AuthWrapper::class));
     }
 
     /**
@@ -114,17 +132,12 @@ class PasswordRecoveryEndpoint extends Endpoint
     /**
      * @param $email
      * @param $link
-     * @throws \PHPMailer\PHPMailer\Exception
      */
     protected function sendEmail($email, $link)
     {
-        //TODO отвязаться от PHPMailer`а
-        /** @var PHPMailer $mailer */
-        $mailer = App::load(PHPMailer::class);
-        $mailer->Subject = 'Ссылка на восстановление пароля';
-        $mailer->Body = "Здравствуйте!\nВы или кто-то от вашего имени запросил смену пароля. Если вы не отправляли эту заявку, просто проигнорируйте это письмо.\nСсылка для восстановления пароля:\n$link";
-        $mailer->addAddress($email);
-        $mailer->send();
+        $recipient = new EmailRecipient($email);
+        $message = new Message('Ссылка на восстановление пароля', "Вы или кто-то от вашего имени запросил смену пароля. Если вы не отправляли эту заявку, просто проигнорируйте это письмо.", $link);
+        return $recipient->notify($message);
     }
 
     /**
