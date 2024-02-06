@@ -3,13 +3,10 @@
 namespace PinaUsers\Endpoints;
 
 use Pina\App;
-use Pina\Controls\LinkedButton;
-use Pina\Controls\RawHtml;
 use Pina\Controls\RecordForm;
-use Pina\Controls\Wrapper;
 use Pina\Data\DataRecord;
 use Pina\Data\Schema;
-use Pina\Http\Endpoint;
+use Pina\Http\RichEndpoint;
 use Pina\Request;
 use PinaNotifications\Messages\Message;
 use PinaNotifications\Recipients\EmailRecipient;
@@ -26,7 +23,7 @@ use Pina\Response;
 
 use function Pina\__;
 
-class PasswordRecoveryEndpoint extends Endpoint
+class PasswordRecoveryEndpoint extends RichEndpoint
 {
 
     /**
@@ -37,30 +34,16 @@ class PasswordRecoveryEndpoint extends Endpoint
     {
         Request::setPlace('page_header', __('Восстановить пароль'));
 
-        /** @var RecordForm $form */
-        $form = App::load(RecordForm::class);
-        $form->setAction($this->location->resource('@'));
-        $form->setMethod('post');
-        $form->load(new DataRecord([], $this->getEmailSchema()));
-
-        $form->getButtonRow()->getMain()->setTitle('Восстановить');
-
-        /** @var LinkedButton $authButton */
-        $authButton = App::make(LinkedButton::class);
-        $authButton->setLink($this->location->link('auth'));
-        $authButton->setTitle(__('Вспомнил пароль'));
-        $form->getButtonRow()->append($authButton);
+        $form = $this->makeRecordForm($this->location->resource('@'), 'post', new DataRecord([], $this->getEmailSchema()));
+        $form->getButtonRow()->getMain()->setTitle(__('Восстановить пароль'));
+        $form->getButtonRow()->append($this->makeLinkedButton(__('Вспомнил пароль'), $this->location->link('auth')));
 
         $status = $this->query()->get('status');
         if ($status == 'success') {
-            $alert = new Wrapper(".alert alert-info");
-            $alert->append(new RawHtml('Ссылка отправлена'));
-            $form->prepend($alert);
+            $form->prepend($this->makeAlert(__('Ссылка отправлена'), 'info'));
         }
         if ($status == 'fail') {
-            $alert = new Wrapper(".alert alert-danger");
-            $alert->append(new RawHtml('Невозможно отправить ссылку'));
-            $form->prepend($alert);
+            $form->prepend($this->makeAlert(__('Невозможно отправить ссылку')));
         }
 
         return $form->wrap(App::make(AuthWrapper::class));

@@ -5,13 +5,11 @@ namespace PinaUsers\Endpoints;
 use Pina\App;
 use Pina\Controls\ButtonRow;
 use Pina\Controls\HandledForm;
-use Pina\Controls\LinkedButton;
-use Pina\Controls\RecordForm;
 use Pina\Controls\SubmitButton;
 use Pina\Controls\Wrapper;
 use Pina\Data\DataRecord;
 use Pina\Data\Schema;
-use Pina\Http\Endpoint;
+use Pina\Http\RichEndpoint;
 use Pina\Request;
 use PinaDashboard\Widgets\Menu;
 use PinaUsers\Auth;
@@ -23,7 +21,7 @@ use Pina\Types\StringType;
 
 use function Pina\__;
 
-class AuthEndpoint extends Endpoint
+class AuthEndpoint extends RichEndpoint
 {
 
     /**
@@ -36,11 +34,8 @@ class AuthEndpoint extends Endpoint
         if ($auth->isSignedIn()) {
             Request::setPlace('page_header', __('Добро пожаловать'));
 
-            /** @var HandledForm $form */
-            $form = App::load(HandledForm::class);
+            $form = $this->makeHandledForm($this->location->link('auth'), 'delete');
             $form->addClass('form-logout');
-            $form->setAction('auth');
-            $form->setMethod('delete');
             $form->append($this->makeDashboardMenu());
             $form->append($this->makeLogoutButton());
             return $form->wrap(App::make(AuthWrapper::class));
@@ -48,21 +43,20 @@ class AuthEndpoint extends Endpoint
 
         Request::setPlace('page_header', __('Войти'));
 
-        /** @var RecordForm $form */
-        $form = App::load(RecordForm::class);
-        $form->setMethod('post');
-        $form->setAction($this->location->link('@'));
-        $form->load(new DataRecord([], $this->getSchema()));
-
+        $form = $this->makeRecordForm($this->location->link('@'), 'post', new DataRecord([], $this->getSchema()));
         $form->getButtonRow()->getMain()->setTitle(__('Войти'));
-
-        /** @var LinkedButton $authButton */
-        $authButton = App::make(LinkedButton::class);
-        $authButton->setLink($this->location->link('password-recovery'));
-        $authButton->setTitle(__('Восстановить пароль'));
-        $form->getButtonRow()->append($authButton);
+        $form->getButtonRow()->append($this->makeLinkedButton(__('Восстановить пароль'), $this->location->link('password-recovery')));
 
         return $form->wrap(App::make(AuthWrapper::class));
+    }
+
+    protected function makeHandledForm($action, $method): HandledForm
+    {
+        /** @var HandledForm $form */
+        $form = App::load(HandledForm::class);
+        $form->setAction($action);
+        $form->setMethod($method);
+        return $form;
     }
 
     /**
