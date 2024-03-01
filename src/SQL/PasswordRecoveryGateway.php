@@ -1,7 +1,8 @@
 <?php
 
-namespace PinaUsers;
+namespace PinaUsers\SQL;
 
+use Exception;
 use Pina\Data\Schema;
 use Pina\DB\TokenGeneratorTrait;
 use Pina\TableDataGateway;
@@ -18,11 +19,11 @@ class PasswordRecoveryGateway extends TableDataGateway
 
     /**
      * @return Schema
-     * @throws \Exception
+     * @throws Exception
      */
     public function getSchema()
     {
-        $schema = new Schema();
+        $schema = parent::getSchema();
         $schema->add('id', 'ID', TokenType::class);
         $schema->setPrimaryKey(['id']);
         $schema->add('user_id', __('Пользователь'), IntegerType::class);

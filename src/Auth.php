@@ -2,8 +2,11 @@
 
 namespace PinaUsers;
 
+use Exception;
 use Pina\App;
+use PinaUsers\SQL\UserGateway;
 use PinaUsers\Types\EmailType;
+use PinaUsers\SQL\AuthGateway;
 use Pina\Types\ValidateException;
 
 class Auth
@@ -13,7 +16,7 @@ class Auth
     protected $userId = 0;
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function __construct()
     {
@@ -38,7 +41,7 @@ class Auth
      * @param string $email
      * @param string $password
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     public function attempt(string $email, string $password)
     {
@@ -56,7 +59,7 @@ class Auth
      * @param string $email
      * @param string $password
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     public function once(string $email, string $password)
     {
@@ -68,7 +71,7 @@ class Auth
     /**
      * @param $userId
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     public function loginUsingId($userId)
     {
@@ -87,7 +90,7 @@ class Auth
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function logout()
     {
@@ -115,7 +118,7 @@ class Auth
      * @param string $login
      * @param string $password
      * @return mixed|null
-     * @throws \Exception
+     * @throws Exception
      */
     protected function validate(string $login, string $password)
     {
@@ -144,7 +147,7 @@ class Auth
     /**
      * @param $login
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     protected function isEmail($login)
     {
@@ -159,7 +162,7 @@ class Auth
     /**
      * @param $userId
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     protected function userExists($userId)
     {
@@ -182,7 +185,7 @@ class Auth
     /**
      * @param $userId
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     protected function start($userId)
     {
@@ -205,7 +208,7 @@ class Auth
      * @param $authId
      * @param $cookie
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     protected function renew($authId, $cookie)
     {

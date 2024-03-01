@@ -2,6 +2,7 @@
 
 namespace PinaUsers\Endpoints;
 
+use Exception;
 use Pina\App;
 use Pina\Controls\RecordForm;
 use Pina\Data\DataRecord;
@@ -12,12 +13,12 @@ use PinaNotifications\Messages\Message;
 use PinaNotifications\Recipients\EmailRecipient;
 use PinaUsers\Controls\AuthWrapper;
 use PinaUsers\Hash;
-use PinaUsers\PasswordRecoveryGateway;
+use PinaUsers\SQL\PasswordRecoveryGateway;
 use PinaUsers\Types\EmailType;
 
 use PinaUsers\Types\PasswordType;
 use PinaUsers\Types\RepeatPasswordType;
-use PinaUsers\UserGateway;
+use PinaUsers\SQL\UserGateway;
 
 use Pina\Response;
 
@@ -28,7 +29,7 @@ class PasswordRecoveryEndpoint extends RichEndpoint
 
     /**
      * @return RecordForm
-     * @throws \Exception
+     * @throws Exception
      */
     public function index()
     {
@@ -51,7 +52,7 @@ class PasswordRecoveryEndpoint extends RichEndpoint
 
     /**
      * @return Response
-     * @throws \Exception
+     * @throws Exception
      */
     public function store()
     {
@@ -75,7 +76,7 @@ class PasswordRecoveryEndpoint extends RichEndpoint
     /**
      * @param $id
      * @return RecordForm
-     * @throws \Exception
+     * @throws Exception
      */
     public function show($id)
     {
@@ -95,7 +96,7 @@ class PasswordRecoveryEndpoint extends RichEndpoint
     /**
      * @param $id
      * @return Response
-     * @throws \Exception
+     * @throws Exception
      */
     public function destroy($id)
     {
@@ -125,7 +126,7 @@ class PasswordRecoveryEndpoint extends RichEndpoint
 
     /**
      * @return Schema
-     * @throws \Exception
+     * @throws Exception
      */
     protected function getEmailSchema()
     {
@@ -136,7 +137,7 @@ class PasswordRecoveryEndpoint extends RichEndpoint
 
     /**
      * @return Schema
-     * @throws \Exception
+     * @throws Exception
      */
     protected function getPasswordSchema()
     {

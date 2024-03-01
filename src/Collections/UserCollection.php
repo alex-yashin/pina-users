@@ -3,9 +3,10 @@
 
 namespace PinaUsers\Collections;
 
+use Exception;
 use PinaUsers\Hash;
 use PinaUsers\Types\RepeatPasswordType;
-use PinaUsers\UserGateway;
+use PinaUsers\SQL\UserGateway;
 use Pina\Data\DataCollection;
 use Pina\Data\Schema;
 
@@ -30,7 +31,7 @@ class UserCollection extends DataCollection
 
     /**
      * @return Schema
-     * @throws \Exception
+     * @throws Exception
      */
     public function getPasswordSchema()
     {
@@ -44,7 +45,7 @@ class UserCollection extends DataCollection
      * @param array $data
      * @param array $context
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
     public function updatePassword(string $id, array $data): string
     {

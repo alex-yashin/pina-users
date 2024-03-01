@@ -4,7 +4,11 @@
 namespace PinaUsers\Endpoints;
 
 
+use Exception;
+use Pina\Controls\ButtonRow;
+use Pina\Controls\Control;
 use Pina\Response;
+use PinaUsers\Auth;
 use PinaUsers\Collections\UserCollection;
 use Pina\App;
 use Pina\Data\DataRecord;
@@ -19,7 +23,7 @@ class UserEndpoint extends DelegatedCollectionEndpoint
     public function __construct(Request $request)
     {
         parent::__construct($request);
-        $this->composer->configure(__('Пользователи'), 'Добавить пользователя');
+        $this->composer->configure(__('Пользователи'), __('Добавить пользователя'));
         $this->composer->setItemCallback(
             function (DataRecord $record) {
                 $data = $record->getData();
@@ -31,8 +35,8 @@ class UserEndpoint extends DelegatedCollectionEndpoint
 
     /**
      * @param $id
-     * @return \Pina\Controls\Control
-     * @throws \Exception
+     * @return Control
+     * @throws Exception
      */
     public function show($id)
     {
@@ -54,7 +58,7 @@ class UserEndpoint extends DelegatedCollectionEndpoint
 
     /**
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     protected function makePasswordForm()
     {
@@ -62,5 +66,25 @@ class UserEndpoint extends DelegatedCollectionEndpoint
         return $this->makeEditForm(new DataRecord([], $schema))->setAction($this->location->link('@/password'));
     }
 
+    /**
+     * @return ButtonRow
+     */
+    protected function makeViewButtonRow(DataRecord $record)
+    {
+        $row = parent::makeViewButtonRow($record);
+        $row->append($this->makeActionButton(__('Авторизоваться под пользователем'), $this->location->resource('@/login-as'), 'post'));
+        return $row;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function storeLoginAs($tmp, $id)
+    {
+        /** @var Auth $auth */
+        $auth = App::load(Auth::class);
+        $auth->loginUsingId($id);
+        return Response::ok()->contentLocation('/');
+    }
 
 }

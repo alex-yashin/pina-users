@@ -2,6 +2,7 @@
 
 namespace PinaUsers\Endpoints;
 
+use Exception;
 use Pina\App;
 use Pina\Controls\ButtonRow;
 use Pina\Controls\HandledForm;
@@ -25,7 +26,7 @@ class AuthEndpoint extends RichEndpoint
 {
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function index()
     {
@@ -61,7 +62,7 @@ class AuthEndpoint extends RichEndpoint
 
     /**
      * @return Response
-     * @throws \Exception
+     * @throws Exception
      */
     public function store()
     {
@@ -78,7 +79,7 @@ class AuthEndpoint extends RichEndpoint
 
     /**
      * @return Response
-     * @throws \Exception
+     * @throws Exception
      */
     public function destroy()
     {
@@ -90,7 +91,7 @@ class AuthEndpoint extends RichEndpoint
 
     /**
      * @return Schema
-     * @throws \Exception
+     * @throws Exception
      */
     protected function getSchema()
     {

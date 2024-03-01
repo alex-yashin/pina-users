@@ -1,7 +1,8 @@
 <?php
 
-namespace PinaUsers;
+namespace PinaUsers\SQL;
 
+use Exception;
 use Pina\Types\UnsignedIntegerType;
 use Pina\Data\Schema;
 use Pina\TableDataGateway;
@@ -9,6 +10,8 @@ use Pina\Types\IntegerType;
 use Pina\Types\StringType;
 use Pina\Types\TimestampType;
 use Pina\Types\TokenType;
+
+use PinaUsers\Auth;
 
 use function Pina\__;
 
@@ -18,11 +21,11 @@ class AuthGateway extends TableDataGateway
 
     /**
      * @return Schema
-     * @throws \Exception
+     * @throws Exception
      */
     public function getSchema()
     {
-        $schema = new Schema();
+        $schema = parent::getSchema();
         $schema->add('id', 'ID', TokenType::class);
         $schema->setPrimaryKey(['id']);
         $schema->add('user_id', __('Пользователь'), IntegerType::class);
@@ -49,7 +52,7 @@ class AuthGateway extends TableDataGateway
     /**
      * @param array $data
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function add($data = array())
     {
