@@ -32,4 +32,9 @@ class PasswordRecoveryGateway extends TableDataGateway
         return $schema;
     }
 
+    public function whereExpired()
+    {
+        return $this->where($this->getAlias().".created_at < date_sub(NOW(), INTERVAL 1 DAY)");
+    }
+
 }
