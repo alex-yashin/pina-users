@@ -6,13 +6,13 @@ use Exception;
 use Pina\App;
 use Pina\Controls\ButtonRow;
 use Pina\Controls\HandledForm;
+use Pina\Controls\Nav;
 use Pina\Controls\SubmitButton;
 use Pina\Controls\Wrapper;
 use Pina\Data\DataRecord;
 use Pina\Data\Schema;
 use Pina\Http\RichEndpoint;
 use Pina\Request;
-use PinaDashboard\Widgets\Menu;
 use PinaUsers\Auth;
 use PinaUsers\Controls\AuthWrapper;
 use PinaUsers\Types\PasswordType;
@@ -103,10 +103,14 @@ class AuthEndpoint extends RichEndpoint
 
     protected function makeDashboardMenu()
     {
-        /** @var Menu $menu */
-        $menu = App::make(Menu::class);
-        $menu->wrap(new Wrapper('nav.card'));
-        return $menu;
+        /** @var Nav $nav */
+        $nav = App::make(Nav::class);
+        $menu = App::router()->getMenu();
+        foreach ($menu as $linkedItem) {
+            $nav->add($linkedItem);
+        }
+        $nav->wrap(new Wrapper('nav.card'));
+        return $nav;
     }
 
     protected function makeLogoutButton()
