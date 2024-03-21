@@ -16,7 +16,6 @@
     "require": {
         "php": ">=7.2",
         "pinahq/framework": "*",
-        "alex-yashin/pina-dashboard": "*",
         "alex-yashin/pina-notifications": "*"
     },
     "autoload": {

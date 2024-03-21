@@ -2,7 +2,6 @@
 
 namespace PinaUsers;
 
-use PinaDashboard\Dashboard;
 use Pina\Access;
 use Pina\App;
 use Pina\ModuleInterface;
@@ -35,24 +34,23 @@ class Module implements ModuleInterface
 
     public function http()
     {
-        $_SERVER['PINA_USER_ID'] = $userId = App::make(Auth::class)->userId();
-
-        App::router()->register('auth', AuthEndpoint::class);
-        App::router()->register('403', AuthEndpoint::class);
-        App::router()->register('password-recovery', PasswordRecoveryEndpoint::class);
-
-        /** @var Dashboard $dashboard */
-        $dashboard = App::load(Dashboard::class);
-        $section = $dashboard->section($this->getTitle());
-        $section->register('users', UserEndpoint::class);
-
         Access::addGroup('public');
+
+        $_SERVER['PINA_USER_ID'] = $userId = App::make(Auth::class)->userId();
         if ($userId) {
             Access::addGroup('registered');
         }
+
+        App::router()->register('auth', AuthEndpoint::class);
         Access::permit('auth', 'public');
+
+        App::router()->register('403', AuthEndpoint::class);
         Access::permit('403', 'public');
+
+        App::router()->register('password-recovery', PasswordRecoveryEndpoint::class);
         Access::permit('password-recovery', 'public');
+
+        App::router()->register('users', UserEndpoint::class);
         Access::permit('users', 'root');
 
         return [];

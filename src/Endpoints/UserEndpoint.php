@@ -26,7 +26,7 @@ class UserEndpoint extends DelegatedCollectionEndpoint
         $this->composer->configure(__('Пользователи'), __('Добавить пользователя'));
         $this->composer->setItemCallback(
             function (DataRecord $record) {
-                $data = $record->getData();
+                $data = $record->getTextData();
                 return $data['first_name'] . ' ' . $data['last_name'];
             }
         );
