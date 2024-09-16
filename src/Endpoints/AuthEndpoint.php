@@ -6,7 +6,7 @@ use Exception;
 use Pina\App;
 use Pina\Controls\ButtonRow;
 use Pina\Controls\HandledForm;
-use Pina\Controls\Nav;
+use Pina\Controls\Nav\Nav;
 use Pina\Controls\SubmitButton;
 use Pina\Controls\Wrapper;
 use Pina\Data\DataRecord;
@@ -107,7 +107,7 @@ class AuthEndpoint extends RichEndpoint
         $nav = App::make(Nav::class);
         $menu = App::router()->getMenu();
         foreach ($menu as $linkedItem) {
-            $nav->add($linkedItem);
+            $nav->appendLink($linkedItem->getTitle(), $linkedItem->getLink());
         }
         $nav->wrap(new Wrapper('nav.card'));
         return $nav;
