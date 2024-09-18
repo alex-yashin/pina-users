@@ -13,7 +13,7 @@ class Auth
 {
 
     const EXPIRATION_INTERVAL = 360000;
-    protected $userId = 0;
+    protected $userId = null;
 
     /**
      * @throws Exception
