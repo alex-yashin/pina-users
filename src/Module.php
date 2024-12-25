@@ -36,7 +36,7 @@ class Module implements ModuleInterface
     {
         Access::addGroup('public');
 
-        $_SERVER['PINA_USER_ID'] = $userId = App::make(Auth::class)->userId();
+        $_SERVER['PINA_USER_ID'] = $userId = App::load(Auth::class)->userId();
         if ($userId) {
             Access::addGroup('registered');
         }

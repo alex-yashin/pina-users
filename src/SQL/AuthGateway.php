@@ -54,8 +54,10 @@ class AuthGateway extends TableDataGateway
      * @return mixed
      * @throws Exception
      */
-    public function add($data = array())
+    public function add($data = array(), $fields = array())
     {
+        $this->adjustDataAndFields($data, $fields);
+
         if (isset($data['ip'])) {
             $ip = $data['ip'];
             unset($data['ip']);
