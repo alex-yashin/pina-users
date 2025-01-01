@@ -8,6 +8,7 @@ use Pina\Controls\RecordForm;
 use Pina\Data\DataRecord;
 use Pina\Data\Schema;
 use Pina\Http\RichEndpoint;
+use Pina\Http\Url;
 use Pina\Request;
 use PinaNotifications\Messages\Message;
 use PinaNotifications\Recipients\EmailRecipient;
@@ -117,10 +118,11 @@ class PasswordRecoveryEndpoint extends RichEndpoint
      * @param $email
      * @param $link
      */
-    protected function sendEmail($email, $link)
+    protected function sendEmail(string $email, string $link)
     {
         $recipient = new EmailRecipient($email);
-        $message = new Message('Ссылка на восстановление пароля', "Вы или кто-то от вашего имени запросил смену пароля. Если вы не отправляли эту заявку, просто проигнорируйте это письмо.", $link);
+        $url = new Url($link);
+        $message = new Message('Ссылка на восстановление пароля', "Вы или кто-то от вашего имени запросил смену пароля. Если вы не отправляли эту заявку, просто проигнорируйте это письмо.", $url);
         return $recipient->notify($message);
     }
 
