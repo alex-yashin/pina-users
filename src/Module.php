@@ -41,17 +41,12 @@ class Module implements ModuleInterface
             Access::addGroup('registered');
         }
 
-        App::router()->register('auth', AuthEndpoint::class);
-        Access::permit('auth', 'public');
+        App::router()->register('auth', AuthEndpoint::class)->permit('public');
+        App::router()->register('403', AuthEndpoint::class)->permit('public');
+        App::router()->register('password-recovery', PasswordRecoveryEndpoint::class)->permit('public');
 
-        App::router()->register('403', AuthEndpoint::class);
-        Access::permit('403', 'public');
-
-        App::router()->register('password-recovery', PasswordRecoveryEndpoint::class);
-        Access::permit('password-recovery', 'public');
-
-        App::router()->register('users', UserEndpoint::class);
-        Access::permit('users', 'root');
+        App::router()->register('users', UserEndpoint::class)->permit('root');
+        App::router()->register('users/:id/password', Endpoints\UserPasswordEndpoint::class)->permit('root');
 
         return [];
     }

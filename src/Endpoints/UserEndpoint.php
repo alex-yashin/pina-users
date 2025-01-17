@@ -34,39 +34,6 @@ class UserEndpoint extends DelegatedCollectionEndpoint
     }
 
     /**
-     * @param $id
-     * @return Control
-     * @throws Exception
-     */
-    public function show($id)
-    {
-        $r = parent::show($id);
-        if ($this->query()->get('display') == 'edit') {
-            $r->after($this->makePasswordForm());
-        }
-        return $r;
-    }
-
-    public function updatePassword($tmp, $id)
-    {
-        $data = $this->request()->all();
-
-        $id = $this->collection->updatePassword($id, $data);
-
-        return Response::ok()->contentLocation($this->base->link('@/:id', ['id' => $id]));
-    }
-
-    /**
-     * @return mixed
-     * @throws Exception
-     */
-    protected function makePasswordForm()
-    {
-        $schema = $this->collection->getPasswordSchema();
-        return $this->makeEditForm(new DataRecord([], $schema))->setAction($this->location->link('@/password'));
-    }
-
-    /**
      * @return ButtonRow
      */
     protected function makeViewButtonRow(DataRecord $record)
