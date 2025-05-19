@@ -36,7 +36,7 @@ class UserEndpoint extends DelegatedCollectionEndpoint
     /**
      * @return ButtonRow
      */
-    protected function makeViewButtonRow(DataRecord $record)
+    protected function makeViewButtonRow(DataRecord $record): ButtonRow
     {
         $row = parent::makeViewButtonRow($record);
         $row->append($this->makeActionButton(__('Авторизоваться под пользователем'), $this->location->resource('@/login-as'), 'post'));
