@@ -24,10 +24,10 @@ class UserGateway extends TableDataGateway
     public function getSchema()
     {
         $schema = parent::getSchema();
-        $schema->addAutoincrementPrimaryKey('id', 'ID');
-        $schema->add('email', 'Email', EmailType::class)->setNullable()->setMandatory();
-        $schema->add('first_name', __('Имя'), StringType::class)->setMandatory()->setWidth(6);
-        $schema->add('last_name', __('Фамилия'), StringType::class)->setMandatory()->setWidth(6);
+        $schema->addAutoincrementPrimaryKey();
+        $schema->add('email', 'Email', EmailType::class)->setNullable()->setMandatory()->tag('my-profile');
+        $schema->add('first_name', __('Имя'), StringType::class)->setMandatory()->setWidth(6)->tag('my-profile');
+        $schema->add('last_name', __('Фамилия'), StringType::class)->setMandatory()->setWidth(6)->tag('my-profile');
         $schema->add('password', __('Пароль'), PasswordType::class)->setMandatory();
         $schema->add('enabled', __('Активен'), CheckedEnabledType::class);
         $schema->addCreatedAt(__('Дата создания'));
