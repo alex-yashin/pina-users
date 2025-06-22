@@ -15,19 +15,9 @@ use PinaUsers\Collections\UserCollection;
 class MyPasswordEndpoint extends RichEndpoint
 {
 
-    public function __construct(Request $request)
-    {
-        parent::__construct($request);
-
-        /** @var CollectionComposer $composer */
-        $composer = App::make(CollectionComposer::class);
-        $composer->configure('Пароль', '');
-        $this->composer = $composer;
-    }
-
     public function title()
     {
-        return $this->composer->getCollection();
+        return 'Пароль';
     }
 
     /**
@@ -36,7 +26,7 @@ class MyPasswordEndpoint extends RichEndpoint
      */
     public function index()
     {
-        $this->composer->index($this->location);
+        $this->makeCollectionComposer($this->title(), '')->index($this->location);
 
         /** @var UserCollection $collection */
         $collection = App::make(UserCollection::class);

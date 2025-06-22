@@ -7,6 +7,7 @@ namespace PinaUsers\Endpoints;
 use Exception;
 use Pina\Controls\ButtonRow;
 use Pina\Controls\Control;
+use Pina\Data\DataCollection;
 use Pina\Response;
 use PinaUsers\Auth;
 use PinaUsers\Collections\UserCollection;
@@ -19,18 +20,19 @@ use function Pina\__;
 
 class UserEndpoint extends DelegatedCollectionEndpoint
 {
-
-    public function __construct(Request $request)
+    protected function getCollectionTitle(): string
     {
-        parent::__construct($request);
-        $this->composer->configure(__('Пользователи'), __('Добавить пользователя'));
-        $this->composer->setItemCallback(
-            function (DataRecord $record) {
-                $data = $record->getTextData();
-                return $data['first_name'] . ' ' . $data['last_name'];
-            }
-        );
-        $this->collection = $this->export = App::make(UserCollection::class);
+        return __('Пользователи');
+    }
+
+    protected function makeDataCollection(): DataCollection
+    {
+        return App::make(UserCollection::class);
+    }
+
+    protected function makeExportDataCollection(): ?DataCollection
+    {
+        return $this->makeDataCollection();
     }
 
     /**

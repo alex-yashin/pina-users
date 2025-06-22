@@ -5,6 +5,7 @@ namespace PinaUsers;
 use Pina\Access;
 use Pina\App;
 use Pina\ModuleInterface;
+use Pina\Scheduler;
 use PinaUsers\Commands\ClearExpiredPasswordRecovery;
 use PinaUsers\Endpoints\AuthEndpoint;
 use PinaUsers\Endpoints\PasswordRecoveryEndpoint;
@@ -51,10 +52,7 @@ class Module implements ModuleInterface
         return [];
     }
 
-    /**
-     * @param \Pina\Scheduler $scheduler
-     */
-    public function schedule($scheduler)
+    public function schedule(Scheduler $scheduler)
     {
         $scheduler->daily(App::load(ClearExpiredPasswordRecovery::class));
     }
