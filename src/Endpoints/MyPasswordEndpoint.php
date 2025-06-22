@@ -26,13 +26,13 @@ class MyPasswordEndpoint extends RichEndpoint
      */
     public function index()
     {
-        $this->makeCollectionComposer($this->title(), '')->index($this->location);
+        $this->makeCollectionComposer($this->title(), '')->index($this->location());
 
         /** @var UserCollection $collection */
         $collection = App::make(UserCollection::class);
         $record = new DataRecord([], $collection->getPasswordSchema()->setMandatory());
 
-        $view = $this->makeRecordForm($this->location->link('@/password'), 'put', $record);
+        $view = $this->makeRecordForm($this->location()->link('@/password'), 'put', $record);
 
         return $view->addClass('section')->wrap($this->makeSidebarWrapper());
     }

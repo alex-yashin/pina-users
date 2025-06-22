@@ -35,7 +35,7 @@ class AuthEndpoint extends RichEndpoint
         if ($auth->isSignedIn()) {
             Request::setPlace('page_header', __('Добро пожаловать'));
 
-            $form = $this->makeHandledForm($this->location->link('auth'), 'delete');
+            $form = $this->makeHandledForm($this->location()->link('auth'), 'delete');
             $form->addClass('form-logout');
             $form->append($this->makeDashboardMenu());
             $form->append($this->makeLogoutButton());
@@ -44,9 +44,9 @@ class AuthEndpoint extends RichEndpoint
 
         Request::setPlace('page_header', __('Войти'));
 
-        $form = $this->makeRecordForm($this->location->link('@'), 'post', new DataRecord([], $this->getSchema()));
+        $form = $this->makeRecordForm($this->location()->link('@'), 'post', new DataRecord([], $this->getSchema()));
         $form->getButtonRow()->getMain()->setTitle(__('Войти'));
-        $form->getButtonRow()->append($this->makeLinkedButton(__('Восстановить пароль'), $this->location->link('password-recovery')));
+        $form->getButtonRow()->append($this->makeLinkedButton(__('Восстановить пароль'), $this->location()->link('password-recovery')));
 
         return $form->setLayout(App::make(DialogLayout::class));
     }

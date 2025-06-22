@@ -25,14 +25,14 @@ class UserPasswordEndpoint extends RichEndpoint
         /** @var CollectionComposer $composer */
         $composer = App::make(CollectionComposer::class);
         $composer->configure($this->title(), '');
-        $composer->index($this->location);
+        $composer->index($this->location());
 
         /** @var UserCollection $collection */
         $collection = App::make(UserCollection::class);
         $schema = $collection->getPasswordSchema();
 
-        $form = $this->makeRecordForm($this->location->link('@'), 'put', new DataRecord([], $schema));
-        $form->getButtonRow()->append($this->makeLinkedButton(__('Отменить'), $this->location->link('@@')));
+        $form = $this->makeRecordForm($this->location()->link('@'), 'put', new DataRecord([], $schema));
+        $form->getButtonRow()->append($this->makeLinkedButton(__('Отменить'), $this->location()->link('@@')));
 
         return $form->wrap($this->makeSidebarWrapper());
     }
@@ -46,7 +46,7 @@ class UserPasswordEndpoint extends RichEndpoint
         $collection = App::make(UserCollection::class);
         $collection->updatePassword($id, $data);
 
-        return Response::ok()->contentLocation($this->location->link('@@'));
+        return Response::ok()->contentLocation($this->location()->link('@@'));
     }
 
 }

@@ -34,7 +34,7 @@ class MyProfileEndpoint extends RichEndpoint
         /** @var CollectionComposer $composer */
         $composer = App::make(CollectionComposer::class);
         $composer->configure($this->title(), '');
-        $composer->index($this->location);
+        $composer->index($this->location());
 
         $query = $this->makeQuery();
         $query->selectId();
@@ -54,7 +54,7 @@ class MyProfileEndpoint extends RichEndpoint
         $schema->forgetField('id');
 
         $record = new DataRecord($line, $schema);
-        $view = $this->makeRecordForm($this->location->link('@'), 'put', $record);
+        $view = $this->makeRecordForm($this->location()->link('@'), 'put', $record);
 
         return $view->addClass('section')->wrap($this->makeSidebarWrapper());
 

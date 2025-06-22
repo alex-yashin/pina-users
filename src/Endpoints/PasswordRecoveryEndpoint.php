@@ -36,9 +36,9 @@ class PasswordRecoveryEndpoint extends RichEndpoint
     {
         Request::setPlace('page_header', __('Восстановить пароль'));
 
-        $form = $this->makeRecordForm($this->location->resource('@'), 'post', new DataRecord([], $this->getEmailSchema()));
+        $form = $this->makeRecordForm($this->location()->resource('@'), 'post', new DataRecord([], $this->getEmailSchema()));
         $form->getButtonRow()->getMain()->setTitle(__('Восстановить пароль'));
-        $form->getButtonRow()->append($this->makeLinkedButton(__('Вспомнил пароль'), $this->location->link('auth')));
+        $form->getButtonRow()->append($this->makeLinkedButton(__('Вспомнил пароль'), $this->location()->link('auth')));
 
         $status = $this->query()->get('status');
         if ($status == 'success') {
@@ -67,11 +67,11 @@ class PasswordRecoveryEndpoint extends RichEndpoint
         }
 
         $token = PasswordRecoveryGateway::instance()->insertGetId(["user_id" => $userId]);
-        $link = $this->location->link('@/:id', ['id' => $token]);
+        $link = $this->location()->link('@/:id', ['id' => $token]);
 
         $success = $this->sendEmail($normalized['email'], $link);
 
-        return Response::ok()->contentLocation($this->location->link('@', ['status' => $success ? 'success' : 'fail']));
+        return Response::ok()->contentLocation($this->location()->link('@', ['status' => $success ? 'success' : 'fail']));
     }
 
     /**
@@ -88,7 +88,7 @@ class PasswordRecoveryEndpoint extends RichEndpoint
         /** @var RecordForm $form */
         $form = App::load(RecordForm::class);
         $form->setMethod('delete');
-        $form->setAction($this->location->resource('@'));
+        $form->setAction($this->location()->resource('@'));
         $form->load(new DataRecord([], $this->getPasswordSchema()));
 
         return $form->setLayout(App::make(DialogLayout::class));
@@ -111,7 +111,7 @@ class PasswordRecoveryEndpoint extends RichEndpoint
         UserGateway::instance()->whereId($recovery['user_id'])->update($toUpdate);
         PasswordRecoveryGateway::instance()->whereId($id)->delete();
 
-        return Response::ok()->contentLocation($this->location->link('auth', ['message' => 'password_changed']));
+        return Response::ok()->contentLocation($this->location()->link('auth', ['message' => 'password_changed']));
     }
 
     /**
