@@ -6,7 +6,6 @@ namespace PinaUsers\Endpoints;
 
 use Exception;
 use Pina\Controls\ButtonRow;
-use Pina\Controls\Control;
 use Pina\Data\DataCollection;
 use Pina\Response;
 use PinaUsers\Auth;
@@ -14,7 +13,6 @@ use PinaUsers\Collections\UserCollection;
 use Pina\App;
 use Pina\Data\DataRecord;
 use Pina\Http\DelegatedCollectionEndpoint;
-use Pina\Http\Request;
 
 use function Pina\__;
 

@@ -9,11 +9,11 @@ use function Pina\__;
 class RepeatPasswordType extends PasswordType
 {
 
-    protected $context = [];
+    protected $password = null;
 
     public function setContext($context)
     {
-        $this->context = $context;
+        $this->password = $context['password'] ?? null;
         return $this;
     }
 
@@ -21,7 +21,7 @@ class RepeatPasswordType extends PasswordType
     {
         $value = parent::normalize($value, $isMandatory);
 
-        if ($value != ($this->context['password'] ?? '')) {
+        if ($value != ($this->password ?? '')) {
             throw new ValidateException(__("Пароли не совпадают"));
         }
 

@@ -17,13 +17,15 @@ use function Pina\__;
 
 class AuthGateway extends TableDataGateway
 {
-    protected static $table = 'auth';
+    public function getTable(): string
+    {
+        return 'auth';
+    }
 
     /**
-     * @return Schema
      * @throws Exception
      */
-    public function getSchema()
+    public function getSchema(): Schema
     {
         $schema = parent::getSchema();
         $schema->add('id', 'ID', TokenType::class);
@@ -50,21 +52,19 @@ class AuthGateway extends TableDataGateway
     }
 
     /**
-     * @param array $data
      * @return mixed
      * @throws Exception
      */
-    public function add($data = array(), $fields = array())
+    public function add($data)
     {
-        $this->adjustDataAndFields($data, $fields);
+        $this->adjustDataAndFields($data);
 
         if (isset($data['ip'])) {
             $ip = $data['ip'];
             unset($data['ip']);
         }
 
-        $q = "INSERT INTO `" . $this->getTable() . "` SET " .
-            $this->makeSetCondition($data, array_keys($this->getFields()));
+        $q = "INSERT INTO `" . $this->getTable() . "` SET " . $this->makeSetCondition($data);
 
         if (isset($ip)) {
             $ip = ip2long($ip) === false ? 0 : $ip;

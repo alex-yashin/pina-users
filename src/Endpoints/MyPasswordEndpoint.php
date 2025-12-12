@@ -3,10 +3,8 @@
 namespace PinaUsers\Endpoints;
 
 use Pina\App;
-use Pina\Composers\CollectionComposer;
 use Pina\Controls\RecordForm;
 use Pina\Data\DataRecord;
-use Pina\Http\Request;
 use Pina\Http\RichEndpoint;
 use Pina\Response;
 use PinaUsers\Auth;

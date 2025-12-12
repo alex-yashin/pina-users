@@ -15,13 +15,15 @@ class PasswordRecoveryGateway extends TableDataGateway
 {
     use TokenGeneratorTrait;
 
-    protected static $table = "password_recovery";
+    public function getTable(): string
+    {
+        return "password_recovery";
+    }
 
     /**
-     * @return Schema
      * @throws Exception
      */
-    public function getSchema()
+    public function getSchema(): Schema
     {
         $schema = parent::getSchema();
         $schema->add('id', 'ID', TokenType::class);

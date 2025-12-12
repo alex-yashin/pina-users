@@ -38,12 +38,9 @@ class Auth
     }
 
     /**
-     * @param string $email
-     * @param string $password
-     * @return bool
      * @throws Exception
      */
-    public function attempt(string $email, string $password)
+    public function attempt(string $email, string $password): bool
     {
         $this->userId = $this->validate($email, $password);
         if (empty($this->userId)) {
@@ -56,12 +53,9 @@ class Auth
     }
 
     /**
-     * @param string $email
-     * @param string $password
-     * @return bool
      * @throws Exception
      */
-    public function once(string $email, string $password)
+    public function once(string $email, string $password): bool
     {
         $this->userId = $this->validate($email, $password);
 
@@ -69,11 +63,9 @@ class Auth
     }
 
     /**
-     * @param $userId
-     * @return bool
      * @throws Exception
      */
-    public function loginUsingId($userId)
+    public function loginUsingId($userId): bool
     {
         if (!$this->userExists($userId)) {
             return false;
@@ -109,14 +101,12 @@ class Auth
         $this->userId = null;
     }
 
-    public function isSignedIn()
+    public function isSignedIn(): bool
     {
         return !empty($this->userId);
     }
 
     /**
-     * @param string $login
-     * @param string $password
      * @return mixed|null
      * @throws Exception
      */
@@ -145,11 +135,10 @@ class Auth
     }
 
     /**
-     * @param $login
      * @return bool
      * @throws Exception
      */
-    protected function isEmail($login)
+    protected function isEmail(string $login): bool
     {
         try {
             App::type(EmailType::class)->normalize($login, true);
@@ -160,11 +149,9 @@ class Auth
     }
 
     /**
-     * @param $userId
-     * @return bool
      * @throws Exception
      */
-    protected function userExists($userId)
+    protected function userExists($userId): bool
     {
         return UserGateway::instance()
             ->whereId($userId)
@@ -172,7 +159,7 @@ class Auth
             ->exists();
     }
 
-    protected function makeAuthId($pnid)
+    protected function makeAuthId(string $pnid): string
     {
         return md5($pnid . $this->parseUserAgent());
     }
@@ -183,11 +170,9 @@ class Auth
     }
 
     /**
-     * @param $userId
-     * @return bool
      * @throws Exception
      */
-    protected function start($userId)
+    protected function start($userId): bool
     {
         $cookie = $this->generateCookie();
         $data = [
@@ -205,12 +190,9 @@ class Auth
     }
 
     /**
-     * @param $authId
-     * @param $cookie
-     * @return bool
      * @throws Exception
      */
-    protected function renew($authId, $cookie)
+    protected function renew(string $authId, string $cookie): bool
     {
         $this->sendCookie($cookie);
 
@@ -219,7 +201,7 @@ class Auth
         return true;
     }
 
-    protected function sendCookie($cookie): bool
+    protected function sendCookie(string $cookie): bool
     {
         if (isset($_ENV['MODE']) && $_ENV['MODE'] == 'test') {
             return true;
@@ -230,7 +212,7 @@ class Auth
         return setcookie('pnid', $cookie, $expired, '/', '', false, true);
     }
 
-    protected function generateCookie()
+    protected function generateCookie(): string
     {
         $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPRQSTUVWXYZ0123456789";
         $code = "";
@@ -244,17 +226,17 @@ class Auth
         return uniqid($code . time(), true);
     }
 
-    protected function parseCookie()
+    protected function parseCookie(): string
     {
         return $_COOKIE['pnid'] ?? '';
     }
 
-    protected function parseUserAgent()
+    protected function parseUserAgent(): string
     {
         return $_SERVER['HTTP_USER_AGENT'] ?? '';
     }
 
-    protected function parseClientIp()
+    protected function parseClientIp(): string
     {
         if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
             return $_SERVER['HTTP_CLIENT_IP'];

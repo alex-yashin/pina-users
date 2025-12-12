@@ -15,13 +15,15 @@ use function Pina\__;
 
 class UserGateway extends TableDataGateway
 {
-    protected static $table = "user";
+    public function getTable(): string
+    {
+        return "user";
+    }
 
     /**
-     * @return Schema
      * @throws Exception
      */
-    public function getSchema()
+    public function getSchema(): Schema
     {
         $schema = parent::getSchema();
         $schema->addAutoincrementPrimaryKey();
