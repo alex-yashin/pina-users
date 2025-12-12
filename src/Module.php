@@ -5,6 +5,7 @@ namespace PinaUsers;
 use Pina\Access;
 use Pina\App;
 use Pina\ModuleInterface;
+use Pina\Router;
 use Pina\Scheduler;
 use PinaUsers\Commands\ClearExpiredPasswordRecovery;
 use PinaUsers\Endpoints\AuthEndpoint;
@@ -13,10 +14,6 @@ use PinaUsers\Endpoints\UserEndpoint;
 
 class Module implements ModuleInterface
 {
-
-    public function __construct()
-    {
-    }
 
     public function getPath()
     {
@@ -33,28 +30,27 @@ class Module implements ModuleInterface
         return 'Users';
     }
 
-    public function http()
+    public function __construct()
     {
-        Access::addGroup('public');
+        App::onLoad(Auth::class, function (Auth $auth) {
+            Access::addGroup('public');
+            $_SERVER['PINA_USER_ID'] = $userId = $auth->userId();
+            if ($userId) {
+                Access::addGroup('registered');
+            }
+        });
 
-        $_SERVER['PINA_USER_ID'] = $userId = App::load(Auth::class)->userId();
-        if ($userId) {
-            Access::addGroup('registered');
-        }
+        App::onLoad(Router::class, function (Router $router) {
+            $router->register('auth', AuthEndpoint::class)->permit('public');
+            $router->register('403', AuthEndpoint::class)->permit('public');
+            $router->register('password-recovery', PasswordRecoveryEndpoint::class)->permit('public');
 
-        App::router()->register('auth', AuthEndpoint::class)->permit('public');
-        App::router()->register('403', AuthEndpoint::class)->permit('public');
-        App::router()->register('password-recovery', PasswordRecoveryEndpoint::class)->permit('public');
+            $router->register('users', UserEndpoint::class)->permit('root');
+            $router->register('users/:id/password', Endpoints\UserPasswordEndpoint::class)->permit('root');
+        });
 
-        App::router()->register('users', UserEndpoint::class)->permit('root');
-        App::router()->register('users/:id/password', Endpoints\UserPasswordEndpoint::class)->permit('root');
-
-        return [];
+        App::onLoad(Scheduler::class, function (Scheduler $scheduler) {
+            $scheduler->daily(App::load(ClearExpiredPasswordRecovery::class));
+        });
     }
-
-    public function schedule(Scheduler $scheduler)
-    {
-        $scheduler->daily(App::load(ClearExpiredPasswordRecovery::class));
-    }
-
 }
