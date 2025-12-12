@@ -32,16 +32,17 @@ class Module implements ModuleInterface
 
     public function __construct()
     {
-        Access::addGroup('public');
+        App::onLoad(Access::class, function (Access $access) {
+            $access->addGroup('public');
 
-        App::onLoad(Router::class, function (Router $router) {
             /** @var Auth $auth */
             $auth = App::load(Auth::class);
-            $_SERVER['PINA_USER_ID'] = $userId = $auth->userId();
-            if ($userId) {
-                Access::addGroup('registered');
+            if ($auth->userId()) {
+                $access->addGroup('registered');
             }
+        });
 
+        App::onLoad(Router::class, function (Router $router) {
             $router->register('auth', AuthEndpoint::class)->permit('public');
             $router->register('403', AuthEndpoint::class)->permit('public');
             $router->register('password-recovery', PasswordRecoveryEndpoint::class)->permit('public');
