@@ -24,7 +24,7 @@ class MyPasswordEndpoint extends RichEndpoint
      */
     public function index()
     {
-        $this->makeCollectionComposer($this->title(), '')->index($this->location());
+        $this->makeCollectionComposer($this->title())->index($this->location());
 
         /** @var UserCollection $collection */
         $collection = App::make(UserCollection::class);

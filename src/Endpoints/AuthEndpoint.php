@@ -12,7 +12,6 @@ use Pina\Controls\Wrapper;
 use Pina\Data\DataRecord;
 use Pina\Data\Schema;
 use Pina\Http\RichEndpoint;
-use Pina\Request;
 use PinaUsers\Auth;
 use PinaUsers\Layouts\DialogLayout;
 use PinaUsers\Types\PasswordType;
@@ -33,7 +32,7 @@ class AuthEndpoint extends RichEndpoint
         /** @var Auth $auth */
         $auth = App::load(Auth::class);
         if ($auth->isSignedIn()) {
-            Request::setPlace('page_header', __('Добро пожаловать'));
+            App::place('page_header')->set(__('Добро пожаловать'));
 
             $form = $this->makeHandledForm($this->location()->link('auth'), 'delete');
             $form->addClass('form-logout');
@@ -42,7 +41,7 @@ class AuthEndpoint extends RichEndpoint
             return $form->setLayout(App::make(DialogLayout::class));
         }
 
-        Request::setPlace('page_header', __('Войти'));
+        App::place('page_header')->set(__('Войти'));
 
         $form = $this->makeRecordForm($this->location()->link('@'), 'post', new DataRecord([], $this->getSchema()));
         $form->getButtonRow()->getMain()->setTitle(__('Войти'));
@@ -61,7 +60,6 @@ class AuthEndpoint extends RichEndpoint
     }
 
     /**
-     * @return Response
      * @throws Exception
      */
     public function store()
@@ -78,7 +76,6 @@ class AuthEndpoint extends RichEndpoint
     }
 
     /**
-     * @return Response
      * @throws Exception
      */
     public function destroy()
@@ -90,10 +87,9 @@ class AuthEndpoint extends RichEndpoint
     }
 
     /**
-     * @return Schema
      * @throws Exception
      */
-    protected function getSchema()
+    protected function getSchema(): Schema
     {
         $schema = new Schema();
         $schema->add('email', 'Email', StringType::class)->setMandatory();
@@ -101,7 +97,7 @@ class AuthEndpoint extends RichEndpoint
         return $schema;
     }
 
-    protected function makeDashboardMenu()
+    protected function makeDashboardMenu(): Nav
     {
         /** @var Nav $nav */
         $nav = App::make(Nav::class);

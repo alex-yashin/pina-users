@@ -9,7 +9,6 @@ use Pina\Data\DataRecord;
 use Pina\Data\Schema;
 use Pina\Http\RichEndpoint;
 use Pina\Http\Url;
-use Pina\Request;
 use PinaNotifications\Messages\Message;
 use PinaNotifications\Recipients\EmailRecipient;
 use PinaUsers\Hash;
@@ -34,7 +33,7 @@ class PasswordRecoveryEndpoint extends RichEndpoint
      */
     public function index()
     {
-        Request::setPlace('page_header', __('Восстановить пароль'));
+        App::place('page_header')->set(__('Восстановить пароль'));
 
         $form = $this->makeRecordForm($this->location()->resource('@'), 'post', new DataRecord([], $this->getEmailSchema()));
         $form->getButtonRow()->getMain()->setTitle(__('Восстановить пароль'));
@@ -81,7 +80,7 @@ class PasswordRecoveryEndpoint extends RichEndpoint
      */
     public function show($id)
     {
-        Request::setPlace('page_header', __('Сменить пароль'));
+        App::place('page_header')->set(__('Сменить пароль'));
 
         PasswordRecoveryGateway::instance()->findOrFail($id);
 
