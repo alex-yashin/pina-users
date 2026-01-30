@@ -9,16 +9,12 @@ class Hash
 
     public static function make($password)
     {
-        /** @var Model\Hash $impl */
-        $impl = App::load(Model\Hash::class);
-        return $impl->make($password);
+        return Model\Hash::load()->make($password);
     }
 
     public static function check($password, $hash)
     {
-        /** @var Model\Hash $impl */
-        $impl = App::load(Model\Hash::class);
-        return $impl->check($password, $hash);
+        return Model\Hash::load()->check($password, $hash);
     }
 
 }

@@ -15,6 +15,11 @@ class Auth
     const EXPIRATION_INTERVAL = 360000;
     protected $userId = null;
 
+    public static function load(): Auth
+    {
+        return App::load(static::class);
+    }
+
     /**
      * @throws Exception
      */
