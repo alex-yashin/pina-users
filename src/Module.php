@@ -44,7 +44,6 @@ class Module implements ModuleInterface
 
         App::onLoad(Router::class, function (Router $router) {
             $router->register('auth', AuthEndpoint::class)->permit('public');
-            $router->register('403', AuthEndpoint::class)->permit('public');
             $router->register('password-recovery', PasswordRecoveryEndpoint::class)->permit('public');
 
             $router->register('users', UserEndpoint::class)->permit('root');

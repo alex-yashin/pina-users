@@ -19,14 +19,14 @@ class UserCollection extends DataCollection
         return UserGateway::instance();
     }
 
-    public function getSchema(): Schema
+    public function getSchema($context = []): Schema
     {
-        return parent::getSchema()->forgetField('password');
+        return parent::getSchema($context)->forgetField('password');
     }
 
-    public function getListSchema(): Schema
+    public function getListSchema($context = []): Schema
     {
-        return parent::getListSchema()->forgetField('password');
+        return parent::getListSchema($context)->forgetField('password');
     }
 
     /**
