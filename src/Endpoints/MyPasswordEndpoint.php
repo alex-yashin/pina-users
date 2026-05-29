@@ -40,7 +40,7 @@ class MyPasswordEndpoint extends RichEndpoint
      * @return Response
      * @throws \Exception
      */
-    public function update($id)
+    public function update()
     {
         /** @var UserCollection $collection */
         $collection = App::make(UserCollection::class);

@@ -47,7 +47,7 @@ class Module implements ModuleInterface
             $router->register('password-recovery', PasswordRecoveryEndpoint::class)->permit('public');
 
             $router->register('users', UserEndpoint::class)->permit('root');
-            $router->register('users/:id/password', Endpoints\UserPasswordEndpoint::class)->permit('root');
+            $router->register('users/:user_id/password', Endpoints\UserPasswordEndpoint::class)->permit('root');
         });
 
         App::onLoad(Scheduler::class, function (Scheduler $scheduler) {

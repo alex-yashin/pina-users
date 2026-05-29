@@ -38,8 +38,10 @@ class UserPasswordEndpoint extends RichEndpoint
     }
 
 
-    public function update($tmp, $id)
+    public function update()
     {
+        $id = $this->attributes()->get('user_id');
+
         $data = $this->request()->all();
 
         /** @var UserCollection $collection */

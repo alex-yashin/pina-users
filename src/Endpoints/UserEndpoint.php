@@ -46,7 +46,7 @@ class UserEndpoint extends DelegatedCollectionEndpoint
     /**
      * @throws Exception
      */
-    public function storeLoginAs($tmp, $id)
+    public function storeLoginAs($id)
     {
         /** @var Auth $auth */
         $auth = App::load(Auth::class);
