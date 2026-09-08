@@ -13,7 +13,6 @@ use Pina\Data\DataRecord;
 use Pina\Data\Schema;
 use Pina\Http\RichEndpoint;
 use PinaUsers\Auth;
-use PinaUsers\Layouts\DialogLayout;
 use PinaUsers\Types\PasswordType;
 
 use Pina\Response;
@@ -38,7 +37,7 @@ class AuthEndpoint extends RichEndpoint
             $form->addClass('form-logout');
             $form->append($this->makeDashboardMenu());
             $form->append($this->makeLogoutButton());
-            return $form->setLayout(App::make(DialogLayout::class));
+            return $form;
         }
 
         App::place('page_header')->set(__('Войти'));
@@ -47,7 +46,7 @@ class AuthEndpoint extends RichEndpoint
         $form->getButtonRow()->getMain()->setTitle(__('Войти'));
         $form->getButtonRow()->append($this->makeLinkedButton(__('Восстановить пароль'), $this->location()->link('password-recovery')));
 
-        return $form->setLayout(App::make(DialogLayout::class));
+        return $form;
     }
 
     protected function makeHandledForm($action, $method): HandledForm

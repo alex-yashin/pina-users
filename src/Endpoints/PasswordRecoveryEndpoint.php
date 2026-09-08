@@ -12,7 +12,6 @@ use Pina\Http\Url;
 use PinaNotifications\Messages\Message;
 use PinaNotifications\Recipients\EmailRecipient;
 use PinaUsers\Hash;
-use PinaUsers\Layouts\DialogLayout;
 use PinaUsers\SQL\PasswordRecoveryGateway;
 use PinaUsers\Types\EmailType;
 
@@ -47,7 +46,7 @@ class PasswordRecoveryEndpoint extends RichEndpoint
             $form->prepend($this->makeAlert(__('Невозможно отправить ссылку')));
         }
 
-        return $form->setLayout(App::make(DialogLayout::class));
+        return $form;
     }
 
     /**
@@ -90,7 +89,7 @@ class PasswordRecoveryEndpoint extends RichEndpoint
         $form->setAction($this->location()->resource('@'));
         $form->load(new DataRecord([], $this->getPasswordSchema()));
 
-        return $form->setLayout(App::make(DialogLayout::class));
+        return $form;
     }
 
     /**
