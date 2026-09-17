@@ -5,6 +5,7 @@ namespace PinaUsers\SQL;
 use Exception;
 use Pina\Types\CheckedEnabledType;
 use Pina\Types\StringType;
+use Pina\Types\TimestampType;
 use PinaUsers\Types\EmailType;
 use PinaUsers\Types\PasswordType;
 
@@ -33,6 +34,7 @@ class UserGateway extends TableDataGateway
         $schema->add('password', __('Пароль'), PasswordType::class)->setMandatory();
         $schema->add('enabled', __('Активен'), CheckedEnabledType::class);
         $schema->addCreatedAt(__('Дата создания'));
+        $schema->add('last_login_at', __('Дата последнего входа'), TimestampType::class)->setNullable()->setStatic();
         $schema->addUniqueKey(['email']);
         return $schema;
     }

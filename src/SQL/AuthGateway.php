@@ -42,11 +42,17 @@ class AuthGateway extends TableDataGateway
     public function getTriggers()
     {
         $interval = Auth::EXPIRATION_INTERVAL;
+        $userTable = UserGateway::instance()->getTable();
         return [
             [
                 $this->getTable(),
                 'before insert',
                 "SET NEW.expired_at=NEW.created_at + INTERVAL $interval SECOND"
+            ],
+            [
+                $this->getTable(),
+                'after insert',
+                "UPDATE $userTable SET last_login_at=NOW() WHERE id=NEW.user_id"
             ],
         ];
     }
