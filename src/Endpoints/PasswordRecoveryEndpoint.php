@@ -4,7 +4,7 @@ namespace PinaUsers\Endpoints;
 
 use Exception;
 use Pina\App;
-use Pina\Controls\RecordForm;
+use Pina\Controls\Record\RecordForm;
 use Pina\Data\DataRecord;
 use Pina\Data\Schema;
 use Pina\Http\RichEndpoint;

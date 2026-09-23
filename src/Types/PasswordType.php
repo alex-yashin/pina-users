@@ -2,8 +2,8 @@
 
 namespace PinaUsers\Types;
 
-use Pina\Controls\FormControl;
-use Pina\Controls\FormInput;
+use Pina\Controls\Form\FormControl;
+use Pina\Controls\Form\FormInput;
 use Pina\App;
 use Pina\Data\Field;
 use Pina\Types\StringType;

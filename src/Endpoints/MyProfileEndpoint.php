@@ -6,7 +6,7 @@ namespace PinaUsers\Endpoints;
 
 use Pina\App;
 use Pina\Composers\CollectionComposer;
-use Pina\Controls\RecordForm;
+use Pina\Controls\Record\RecordForm;
 use Pina\Data\DataRecord;
 use Pina\Data\Schema;
 use Pina\ForbiddenException;

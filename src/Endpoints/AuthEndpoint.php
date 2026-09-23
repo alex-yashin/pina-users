@@ -4,10 +4,10 @@ namespace PinaUsers\Endpoints;
 
 use Exception;
 use Pina\App;
-use Pina\Controls\ButtonRow;
-use Pina\Controls\HandledForm;
+use Pina\Controls\Components\ButtonRow;
+use Pina\Controls\Form\HandledForm;
 use Pina\Controls\Nav\Nav;
-use Pina\Controls\SubmitButton;
+use Pina\Controls\Form\SubmitButton;
 use Pina\Controls\Wrapper;
 use Pina\Data\DataRecord;
 use Pina\Data\Schema;

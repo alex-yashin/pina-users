@@ -5,7 +5,7 @@ namespace PinaUsers\Endpoints;
 
 
 use Exception;
-use Pina\Controls\ButtonRow;
+use Pina\Controls\Components\ButtonRow;
 use Pina\Data\DataCollection;
 use Pina\Response;
 use PinaUsers\Auth;

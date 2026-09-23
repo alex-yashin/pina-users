@@ -3,7 +3,7 @@
 namespace PinaUsers\Endpoints;
 
 use Pina\App;
-use Pina\Controls\RecordForm;
+use Pina\Controls\Record\RecordForm;
 use Pina\Data\DataRecord;
 use Pina\Http\RichEndpoint;
 use Pina\Response;
