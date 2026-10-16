@@ -41,10 +41,17 @@ class UserGateway extends TableDataGateway
 
     public function selectTitle($alias = 'title')
     {
-        return $this->calculate(
-            "CONCAT(" . $this->getAlias() . ".first_name, ' ', " . $this->getAlias() . ".last_name)",
-            $alias
-        );
+        return $this->calculate($this->getTitleCondition(), $alias);
+    }
+
+    public function orderByTitle()
+    {
+        return $this->orderByRaw($this->getTitleCondition() . ' asc');
+    }
+
+    protected function getTitleCondition()
+    {
+        return "CONCAT(" . $this->getAlias() . ".first_name, ' ', " . $this->getAlias() . ".last_name)";
     }
 
 }
